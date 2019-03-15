@@ -15,7 +15,7 @@ SECRET_KEY = 'wb8116cxi^c7yed!bua+h3*yfc5oly5l*$s$_tz9r=btbmt+*d'
 DEBUG = True
 
 # Application definition
-ALLOWED_HOSTS = ['ec2-18-232-72-164.compute-1.amazonaws.com', '18.232.72.164',]
+ALLOWED_HOSTS = ['ec2-3-85-113-134.compute-1.amazonaws.com', '3.85.113.134',]
 
 # Aplicaciones del core de Django
 DJANGO_APPS = [
@@ -81,8 +81,8 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1',
     'http://127.0.0.1',
     'localhost:8000',
-    'ec2-18-232-72-164.compute-1.amazonaws.com',
-    '18.232.72.164',
+    'ec2-3-85-113-134.compute-1.amazonaws.com',
+    '3.85.113.134',
 )
 
 WSGI_APPLICATION = 'test-useit.wsgi.application'
