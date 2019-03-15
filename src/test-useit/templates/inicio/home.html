@@ -104,7 +104,7 @@
 <script src="http://127.0.0.1:19321/socket.io/socket.io.js"></script>
 <script>
     const results = [];
-    var tablero = io.connect('http://127.0.0.1:19321/', {secure: true});
+    var tablero = io.connect('http://3.85.113.134:19321/', {secure: true});
     tablero.on('connect', function(socket) {
         console.log(socket)
     });
@@ -127,7 +127,7 @@
         var e = document.getElementById(`estadoIdea-${id}`);
         var estadoIdea = e.options[e.selectedIndex].value;
 
-        var url = 'http://localhost:8000/api/auth/ideas/';
+        var url = 'http://3.85.113.134/api/auth/ideas/';
         var data = {nombre: nombreIdea, estado: estadoIdea, board: id};
         var idea = document.querySelector(`#card-${id}`);
 
@@ -136,7 +136,7 @@
             body: JSON.stringify(data),
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': 'Token 7141d64c201f409bff47e4b61d1cac8476f57125'
+                'Authorization': 'Token b1b93253a301da3f7c055d9d44f6f7b25c55c39e'
             }
         }).then(res => res.json())
         .then((data) => {
