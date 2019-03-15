@@ -15,7 +15,7 @@ SECRET_KEY = 'wb8116cxi^c7yed!bua+h3*yfc5oly5l*$s$_tz9r=btbmt+*d'
 DEBUG = True
 
 # Application definition
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ec2-18-232-72-164.compute-1.amazonaws.com', '18.232.72.164',]
 
 # Aplicaciones del core de Django
 DJANGO_APPS = [
@@ -81,6 +81,8 @@ CORS_ORIGIN_WHITELIST = (
     '127.0.0.1',
     'http://127.0.0.1',
     'localhost:8000',
+    'ec2-18-232-72-164.compute-1.amazonaws.com',
+    '18.232.72.164',
 )
 
 WSGI_APPLICATION = 'test-useit.wsgi.application'
@@ -126,6 +128,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = 'static'
 STATIC_URL  = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'test-useit/static'),
