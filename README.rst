@@ -14,11 +14,11 @@ Api Root
 
 .. code-block:: json
 
-	   {
-    		"users": "http://localhost:8000/api/users/",
-    		"boards": "http://localhost:8000/api/boards/",
+       {
+            "users": "http://localhost:8000/api/users/",
+            "boards": "http://localhost:8000/api/boards/",
             "ideas": "http://localhost:8000/api/ideas/",
-    	}
+        }
 
 Obtain Auth Token
 =================
@@ -35,7 +35,7 @@ Obtain Auth Token
 
 .. code-block:: json
 
-	{"token": "xxxxxxx-12345-aaaa-bbbb-9876-xxxx"}
+    {"token": "xxxxxxx-12345-aaaa-bbbb-9876-xxxx"}
 
 
 List User
@@ -55,29 +55,20 @@ List User
 
 .. code-block:: json
 
-	   {
-            "count": 3,
-        	"next": null,
-        	"previous": null,
-        	"results": [
-		    {
-                	"url": "http://localhost:8000/api/auth/users/1/",
-                	"user": "admin",
-                	"limit": 5,
-                	"status": "PENDING",
-                	"files": [
-                    	    {
-                        	"file": "/media/upload/admin/image1.png",
-                        	"ticket": 1
-                    	    },
-                    	    {
-	                       	"file": "/media/upload/admin/image2.png",
-        	               	"ticket": 1
-                	    }
-                	]
-            	    }
-		]
-	   }
+       {
+            "count": 1,
+            "next": null,
+            "previous": null,
+            "results": [
+            {
+                "id": 1,
+                "username": "admin",
+                "password": "pbkdf2_sha256$120000$ozvNOpp13k0R$Uu7Q2dYUHos487OMrRGXCNZGSVRpEvdGqUBVdnTVZYo=",
+                "first_name": "",
+                "last_name": "",
+                "identificacion": "333"
+        ]
+       }
 
 
 List Boards
@@ -93,7 +84,7 @@ List Boards
 
 .. code-block:: json
 
-        ?estado=PENDING
+        ?estado=PUBLICO
 
 * **Success Response**:
     * **Code**: ``200 OK``
@@ -136,7 +127,7 @@ Create Board
 
 .. code-block:: json
 
-	{"nombre": "Nuevo Tablero", "estado": "PRIVADO"}
+    {"nombre": "Nuevo Tablero", "estado": "PRIVADO"}
 
 
 * **Estado**:
@@ -149,12 +140,12 @@ Create Board
 
 .. code-block:: json
 
-	{
-    	"id": 1,
+    {
+        "id": 1,
         "nombre": "Nuevo Tablero",
         "estado": "PRIVADO",
         "board": 7
-	}
+    }
 
 
 List Ideas
