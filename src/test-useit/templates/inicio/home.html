@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableros{% endblock %}
+
+{% block content %}
+<div class="container mt-3 mb-lg-3">
+    <div class="row justify-content-center align-items-center">
+        <form class="form-inline" method="post">
+            {% csrf_token %}
+            {{form_board.nombre}}
+            {{form_board.estado}}
+            <button type="submit" class="btn btn-success">+ Nuevo Tablero</button>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for board in boards %}
+        <div class="col-md-6" id='board-{{board.id}}'>
+            <div class="card border-primary mb-3 mr-4">
+                {% if board.estado == 'PRIVADO' %}
+                <span class="badge badge-secondary">({{board.estado}})</span>
+                {% else %}
+                <span class="badge badge-warning">({{board.estado}})</span>
+                {% endif %}
+                <div class="card-header">
+                    {{board.nombre}}
+                    <a class="btn btn-danger btn-sm ml-2 mb-1 float-right" href="{% url 'delete-board' board.id %}">--</a>
+                </div>
+                <div class="card-body text-primary" id='card-{{board.id}}'>
+                    {% for bo in board.ideas.all %}
+                    <div class="card mt-2 shadow-lg"  id='idea-{{bo.id}}'>
+                        <div class="card-body">
+                            <span>{{bo.nombre}} - <small class="text-muted">({{bo.estado}})</small>
+                                <button class="btn btn-outline-danger btn-sm float-right">-</button>
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <div class="row justify-content-center">
+                        <form class="form-inline">
+                            <input type="text" class="form-control mr-2" placeholder="Escribe tu idea..." required="" id="nombreIdea-{{board.id}}" />
+                            <select name="estado" class="custom-select mr-2" id="estadoIdea-{{board.id}}">
+                                <option value="PRIVADO">Privado</option>
+                                <option value="PUBLICO">Público</option>
+                            </select>
+                            <a href="#" class="btn btn-primary btn-sm rounded-pill" id="{{board.id}}" onclick="NuevaIdea(this);">+ Nueva Idea</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for b in public_boards %}
+        <div class="col-md-6" id='board-{{b.id}}'>
+            <div class="card border-danger mb-3 mr-4">
+                <span class="badge badge-danger">({{b.estado}})</span>
+                <div class="card-header">
+                    {{b.nombre}}
+                    <span class="badge badge-dark">({{b.propietario.first_name}} {{b.propietario.last_name}})</span>
+                    <a class="btn btn-danger btn-sm ml-2 mb-1 float-right" href="{% url 'delete-board' b.id %}">--</a>
+                </div>
+                <div class="card-body text-primary" id='card-{{b.id}}'>
+                    {% for idea in b.ideas.all %}
+                    <div class="card mt-2 shadow-lg" id='idea-{{idea.id}}'>
+                        <div class="card-body">
+                            <span>{{idea.nombre}} - <small class="text-muted">({{idea.estado}})</small>
+                                <button class="btn btn-outline-danger btn-sm float-right">-</button>
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <div class="row justify-content-center">
+                        <form class="form-inline">
+                            <input type="text" class="form-control mr-2" placeholder="Escribe tu idea..." required=""  id="nombreIdea-{{b.id}}" />
+                            <select name="estado" class="custom-select mr-2" id="estadoIdea-{{b.id}}">
+                                <option value="PRIVADO">Privado</option>
+                                <option value="PUBLICO">Público</option>
+                            </select>
+                            <button type="button" class="btn btn-primary btn-sm rounded-pill" id="{{b.id}}" onclick="NuevaIdea(this);">+ Nueva Idea</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div id="other_boards"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="http://127.0.0.1:19321/socket.io/socket.io.js"></script>
+<script>
+    const results = [];
+    var tablero = io.connect('http://127.0.0.1:19321/', {secure: true});
+    tablero.on('connect', function(socket) {
+        console.log(socket)
+    });
+
+    tablero.on('ideas', function(socket) {
+        $(`#card-${socket.board}`).append('<div class="card mt-2 shadow-lg id="idea-'+ socket.id +'" ">'+
+            '<div class="card-body">'+
+                '<span>'+ socket.nombre +' - <small class="text-muted">('+ socket.estado +')</small>'+
+                        '<button class="btn btn-outline-danger btn-sm float-right">-</button>'+
+                    '</span>'+
+                '</div>'+
+            '</div>');
+    });
+
+    $(function() {});
+
+    function NuevaIdea($this){
+        var id = $this.id;
+        var nombreIdea = document.getElementById(`nombreIdea-${id}`).value;
+        var e = document.getElementById(`estadoIdea-${id}`);
+        var estadoIdea = e.options[e.selectedIndex].value;
+
+        var url = 'http://localhost:8000/api/auth/ideas/';
+        var data = {nombre: nombreIdea, estado: estadoIdea, board: id};
+        var idea = document.querySelector(`#card-${id}`);
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Token 7141d64c201f409bff47e4b61d1cac8476f57125'
+            }
+        }).then(res => res.json())
+        .then((data) => {
+            $(`#card-${id}`).append('<div class="card mt-2 shadow-lg id="idea-'+ data.id +'" ">'+
+            '<div class="card-body">'+
+                '<span>'+ data.nombre +' - <small class="text-muted">('+ data.estado +')</small>'+
+                        '<button class="btn btn-outline-danger btn-sm float-right">-</button>'+
+                    '</span>'+
+                '</div>'+
+            '</div>');
+            tablero.emit('boards', JSON.stringify({'id': data.id, 'nombre': data.nombre, 'estado': data.estado, 'board': data.board }))
+        }
+        ).catch(error => console.error('Error:', error));
+        $(`#nombreIdea-${id}`).val('');
+    }
+
+</script>
+{% endblock %}

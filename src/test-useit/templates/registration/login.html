@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block titulo_1 %}Login{% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom styles -->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+    {% block contenido-formulario %}
+    {% if not user.is_authenticated %}
+    <form method="post" class="form-signin card">
+        {% csrf_token %}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}"/>
+        {% else %}
+        <input type="hidden" name="next" value="{% url 'login' %}"/>
+        {% endif %}
+
+        <div class="text-center mb-4">
+            <img class="mb-4" src="{% static 'img/bootstrap-solid.svg' %}" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">LOGIN</h1>
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% for error in form.non_field_errors %}
+                    {{error}}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div>
+                <input class="form-control mb-4" type="text" name="username" autofocus="" required="" id="id_username" placeholder="Usuario o email" />
+                <label for="id_username" class="sr-only">Usuario o email</label>
+            </div>
+            <div>
+                <input class="form-control mb-4" type="password" name="password" required="" id="id_password" placeholder="Contraseña" />
+                <label for="id_password" class="sr-only">Contraseña</label>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-primary btn-block rounded-pill" type="submit">Iniciar Sesión</button>
+            <a href="{% url 'register' %}" class="btn btn-lg btn-outline-dark btn-block rounded-pill">Registrarse</a>
+            <p class="mt-5 mb-3 text-muted text-center">&copy; <span></span></p>
+        </div>
+    </form>
+    {% else %}
+        <script>
+            window.location.href = "{% url 'home' %}";
+        </script>
+    {% endif %}
+    {% endblock %}
+    {% block js %}
+    <script type="text/javascript">
+        const year = document.querySelector('span');
+        const alerta = document.querySelector('.alert');
+        year.innerHTML = new Date().getFullYear();
+        if (alerta){
+            setTimeout(()=>{
+                alerta.parentNode.removeChild(alerta);
+            }, 3500);
+        }
+    </script>
+    {% endblock %}
+</body>
+</html>

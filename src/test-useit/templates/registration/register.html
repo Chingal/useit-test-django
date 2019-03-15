@@ -1,0 +1,90 @@
+{% extends 'registration/login.html' %}
+{% load staticfiles %}
+
+{% block titulo_1 %}Regitrar{% endblock %}
+
+{% block contenido-formulario %}
+    {% if not user.is_authenticated %}
+    <form method="post" class="form-signin card" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="text-center mb-4">
+            <img class="mb-4" src="{% static 'img/bootstrap-solid.svg' %}" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">REGISTRARSE</h1>
+
+            <div class="col mt-3">
+                {{form.non_field_erros}}
+                <div class="input-field">
+                    <label for="id_username" class="sr-only">Usuario</label>
+                    {{ form.username }}
+                </div>
+                <div class="text-danger right-align">
+                    {{ form.username.errors }}
+                </div>
+            </div>
+
+            <div class="col mt-3">
+                {{form.non_field_erros}}
+                <div class="input-field">
+                    <label for="id_password" class="sr-only">Usuario</label>
+                    {{ form.password }}
+                </div>
+                <div class="text-danger right-align">
+                    {{ form.password.errors }}
+                </div>
+            </div>
+
+            <div class="col mt-3">
+                {{form.non_field_erros}}
+                <div class="input-field">
+                    <label for="id_first_name" class="sr-only">Usuario</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="text-danger right-align">
+                    {{ form.first_name.errors }}
+                </div>
+            </div>
+
+            <div class="col mt-3">
+                {{form.non_field_erros}}
+                <div class="input-field">
+                    <label for="id_last_name" class="sr-only">Usuario</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="text-danger right-align">
+                    {{ form.last_name.errors }}
+                </div>
+            </div>
+
+            <div class="col mt-3">
+                {{form.non_field_erros}}
+                <div class="input-field">
+                    <label for="id_identificacion" class="sr-only">Usuario</label>
+                    {{ form.identificacion }}
+                </div>
+                <div class="text-danger right-align">
+                    {{ form.identificacion.errors }}
+                </div>
+            </div>
+
+            <div class="col mt-3 mb-3">
+                {{ form.non_field_errors }}
+                <label>Foto:</label>
+                {{ form.foto }}
+                <div class="text-danger right-align">
+                    {{ form.foto.errors }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-primary btn-block rounded-pill mb-3" type="submit">Registrarse</button>
+            <a href="{% url 'login' %}">Volver</a>
+            <p class="mt-5 mb-3 text-muted text-center">&copy; <span></span></p>
+        </div>
+    </form>
+    {% else %}
+        <script>
+            window.location.href = "{% url 'home' %}";
+        </script>
+    {% endif %}
+
+{% endblock %}
