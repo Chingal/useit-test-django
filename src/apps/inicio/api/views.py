@@ -13,8 +13,8 @@ from .serializers import *
 class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     name = 'User List'
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    #authentication_classes = (TokenAuthentication,)
+    #permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     pagination_class = AppPageNumberPagination
     queryset = User.objects.all().order_by('id')
 
